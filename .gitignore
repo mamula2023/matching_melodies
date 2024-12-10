@@ -3,3 +3,4 @@
 documentation.txt
 
 .env
+db.sqlite3

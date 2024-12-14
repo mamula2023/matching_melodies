@@ -1,15 +1,16 @@
 from rest_framework import viewsets, permissions, response, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-from event.models import Event
+from event.models import Event, Category, Genre
 from event.serializers import EventSerializer
 from event.permissions import EventPermissions
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = [EventPermissions]
-    
+    parser_classes = [MultiPartParser, FormParser]
     def create(self, request, *args, **kwargs):
         role = request.user.role
         if role != 'organizer':

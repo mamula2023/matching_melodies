@@ -7,11 +7,25 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'username', 'password', 'bio', 'website', 'profile_pic', 'role']
+        fields = ['id', 'email', 'username', 'password', 'bio', 'website', 'profile_pic', 'role', 'coins']
         extra_kwargs = {
             'id': {'read_only': True},
             'password': {'write_only': True},
         }
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        request = self.context.get('request')  # Access the request object
+        if request and request.user == instance:
+            representation['email'] = instance.email
+            representation['coins'] = instance.coins
+        else:
+            representation.pop('email', None) 
+            representation.pop('coins', None)
+
+        return representation
+
 
     def create(self, validated_data):
         user = CustomUser.objects.create_user(**validated_data)

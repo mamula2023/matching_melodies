@@ -17,16 +17,9 @@ class UserViewSet(viewsets.ModelViewSet):
         response.data = {"message": "CustomUser created successfully."}
         return response
 
-    def retrieve(self, request, pk=None, **kwargs):
-        queryset = CustomUser.objects.all()
-        user = get_object_or_404(queryset, pk=pk)
-        serializer = CustomUserSerializer(user)
-        return Response(serializer.data)
-
     def get_permissions(self):
         if self.action == 'create':
             return [permissions.AllowAny()]
-        if self.action == 'retrieve':
-            return [permissions.IsAuthenticated()]
 
+        return [permissions.IsAuthenticated()]
 

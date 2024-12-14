@@ -15,6 +15,9 @@ from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
 
+
+os.system('cls' if os.name == 'nt' else 'clear')
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -48,6 +51,7 @@ INSTALLED_APPS = [
 
     # custom apps
     'user.apps.UserConfig',
+    'event'
 
 ]
 

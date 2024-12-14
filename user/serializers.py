@@ -5,6 +5,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    profile_pic = serializers.ImageField()
     class Meta:
         model = CustomUser
         fields = ['id', 'email', 'username', 'password', 'bio', 'website', 'profile_pic', 'role', 'coins']

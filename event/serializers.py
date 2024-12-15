@@ -1,6 +1,6 @@
-
+from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
-from .models import Event, Category, Genre
+from .models import Event, Category, Genre, Application
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,3 +35,28 @@ class EventSerializer(serializers.ModelSerializer):
 
         return event
 
+class ApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = '__all__'
+        read_only_fields = ['id','event', 'user']
+
+    def validate(self, data):
+        event = self.context.get('event')
+        user = self.context.get('user')
+
+
+        if Application.objects.filter(event=event, user=user).exists():
+            raise serializers.ValidationError("You have already applied to this event")
+
+        return data 
+
+    def create(self, validated_data):
+        event = self.context.get('event')
+        user = self.context.get('user')
+        application = Application.objects.create(
+                user=user,
+                event=event,
+                **validated_data
+                )
+        return application

@@ -28,3 +28,10 @@ class EventPermissions(permissions.BasePermission):
 
         return False
 
+
+class ApplicationPermissions(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated
+
+    def has_object_permission(self, request, view, obj):
+        return obj.event.owner == request.user or obj.user == request.user

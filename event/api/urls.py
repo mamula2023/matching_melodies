@@ -9,6 +9,7 @@ urlpatterns = [
         path('<int:pk>/apply/', ApplicationViewSet.as_view({'post': 'create'}), name='application'),
         path('<int:pk>/application/', ApplicationViewSet.as_view({'get': 'list'}), name='event-applications'),
         path('application/<int:pk>/', ApplicationViewSet.as_view({'get': 'retrieve'}), name='application'),
-
+        path('application/<int:pk>/accept/', ApplicationViewSet.as_view({'post': 'accept'}), name='accpet-application'),
+        path('application/<int:pk>/reject/', ApplicationViewSet.as_view({'post': 'reject'}), name='reject-application'),
 ]
 

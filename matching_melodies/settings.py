@@ -51,7 +51,8 @@ INSTALLED_APPS = [
 
     # custom apps
     'user.apps.UserConfig',
-    'event'
+    'event',
+    'application'
 
 ]
 

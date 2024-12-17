@@ -158,3 +158,11 @@ By default, django server runs on port 8000
    -H "Authorization: Bearer <ACCESS_TOKEN>"
    ```
    This endpoint is only available if user who applied is accessing, or author of event on which application is made
+9. Accept or reject application
+    ```
+    POST /api/event/application/:id/{action}/ \
+    -H "Authorization: Bearer <ACCESS_TOKEN>"
+    ```
+    * {action} is either accept or reject
+    * Accepting or rejecting can only be done once.
+

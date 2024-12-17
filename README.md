@@ -138,3 +138,31 @@ By default, django server runs on port 8000
         ]  
     }
     ```
+6. Apply for event as musician
+   ```
+   POST /api/event/:id/apply/ \
+   -H "Authorization: Beear <ACCESS_TOKEN>"
+   ```
+   User that is applying must be registered as musician.
+   Response with appropriate message is returned
+7. List applications on event
+   ```
+   GET /api/event/:id/application/ \
+   -H "Authorization: Bearer <ACCESS_TOKEN>"
+   ```
+   Only author of event is able to see applications on the event
+
+8. See application of particular ID
+   ```
+   GET /api/event/application/:id/ \
+   -H "Authorization: Bearer <ACCESS_TOKEN>"
+   ```
+   This endpoint is only available if user who applied is accessing, or author of event on which application is made
+9. Accept or reject application
+    ```
+    POST /api/event/application/:id/{action}/ \
+    -H "Authorization: Bearer <ACCESS_TOKEN>"
+    ```
+    * {action} is either accept or reject
+    * Accepting or rejecting can only be done once.
+

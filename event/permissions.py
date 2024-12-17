@@ -2,7 +2,6 @@ from rest_framework import permissions
 from rest_framework.exceptions import PermissionDenied
 
 class EventPermissions(permissions.BasePermission):
-
     def has_permission(self, request, view):
         if view.action in ['list', 'retrieve']:
             return request.user.is_authenticated
@@ -19,6 +18,7 @@ class EventPermissions(permissions.BasePermission):
 
         return False
 
+
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
@@ -31,7 +31,15 @@ class EventPermissions(permissions.BasePermission):
 
 class ApplicationPermissions(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.is_authenticated
+        return request.user.is_authenticated           
 
+        
     def has_object_permission(self, request, view, obj):
-        return obj.event.owner == request.user or obj.user == request.user
+        if view.action == 'retrieve':
+            return obj.event.author == request.user or obj.user == request.user
+
+        if view.action in ['accept', 'reject']:
+            return obj.event.author == request.user
+
+        return False
+

@@ -7,10 +7,12 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'title']
 
+
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
         fields = ['id', 'title']
+
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,11 +20,13 @@ class EventSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['id', 'author']
 
+
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['categories'] = CategorySerializer(instance.categories.all(), many=True).data
         data['genres'] = GenreSerializer(instance.genres.all(), many=True).data
         return data
+
 
     def create(self, validated_data):
         category_ids = validated_data.pop('categories', [])
@@ -35,21 +39,26 @@ class EventSerializer(serializers.ModelSerializer):
 
         return event
 
+
 class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Application
         fields = '__all__'
         read_only_fields = ['id','event', 'user']
 
+
     def validate(self, data):
         event = self.context.get('event')
         user = self.context.get('user')
 
+        if user.role == 'organizer':
+            raise serializers.ValidationError({'detail': 'Organizers can not apply to event'})
 
         if Application.objects.filter(event=event, user=user).exists():
             raise serializers.ValidationError("You have already applied to this event")
 
         return data 
+
 
     def create(self, validated_data):
         event = self.context.get('event')
@@ -60,3 +69,4 @@ class ApplicationSerializer(serializers.ModelSerializer):
                 **validated_data
                 )
         return application
+

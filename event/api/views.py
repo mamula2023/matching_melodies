@@ -6,7 +6,7 @@ from event.models import Event, Category, Genre, Application
 from event.serializers import EventSerializer, ApplicationSerializer
 from event.permissions import EventPermissions, ApplicationPermissions
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, PermissionDenied
 from rest_framework.decorators import action
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -14,6 +14,7 @@ class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     permission_classes = [EventPermissions]
     parser_classes = [MultiPartParser, FormParser]
+
 
     def create(self, request, *args, **kwargs):
         role = request.user.role
@@ -30,9 +31,6 @@ class EventViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-
-
-
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
@@ -41,6 +39,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     queryset = Application.objects.all()
     serializer_class = ApplicationSerializer
     permission_classes = [ApplicationPermissions]    
+
 
     def create(self, request, pk=None):
         try:
@@ -61,15 +60,14 @@ class ApplicationViewSet(viewsets.ModelViewSet):
 
 
     def retrieve(self, request, pk=None):
-        try:
-            application = Application.objects.get(pk=pk)
-        except Application.DoesNotExists:
-            return Response({'detail': 'Application not found'}, status=status.HTTP_404_NOT_FOUND)
+        application = self.get_object()
+
         if application.event.author != request.user and application.user != request.user:
             raise PermissionDenied('You do not have permission to view this application.')
 
         serializer = self.get_serializer(application)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
     def list(self, request, pk=None):
         try:
@@ -84,4 +82,42 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         applications = Application.objects.filter(event=event)
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+    def accept(self, request, pk=None):
+        application = self.get_object()       
+
+        if application.event.author != request.user:
+            return Response({'detail': 'You are not authorized to accept this application.'},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        if application.status != 'pending':
+            return Response({'detail': 'Application status already changed!'}, status=status.HTTP_400_BAD_REQUEST)
+
+        application.status='accepted'
+        application.save()
+        return Response({'detail': 'Application accepted successfully'})
+
+        
+    def reject(self, request, pk=None):
+        application = self.get_object()       
+
+        if application.event.author != request.user:
+            return Response({'detail': 'You are not authorized to reject this application.'},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        if application.status != 'pending':
+            return Response({'detail': 'Application status already changed!'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        application.status = 'rejected'
+        application.save()
+        return Response({'detail': 'Application rejected successfully'})
+
+
+    def get_object(self):
+        pk = self.kwargs.get("pk")
+        try:
+            return Application.objects.get(pk=pk)
+        except Application.DoesNotExist:
+            raise NotFound(detail="Application not found")
 

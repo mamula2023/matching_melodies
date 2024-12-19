@@ -41,3 +41,4 @@ class CustomUserSerializer(serializers.ModelSerializer):
         if password:
             validated_data['password'] = make_password(password)
         return super().update(instance, validated_data)
+

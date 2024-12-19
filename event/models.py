@@ -5,6 +5,10 @@ from user.models import CustomUser
 
 
 class Event(models.Model):
+    TYPE_CHOICES = [
+            ('gig', 'Gig'),
+            ('collaboration', 'Collaboration')
+        ]
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="events")
     title = models.TextField(max_length=30, null=False, blank=False)
     description = models.TextField(max_length=300, blank=False, null=False)
@@ -15,7 +19,7 @@ class Event(models.Model):
     payment = models.IntegerField(null=True)
     additional_info = models.TextField(max_length=100, blank=True, null=True)
 
-
+    event_type = models.CharField(max_length=20, choices=TYPE_CHOICES, null=False, blank=False, default='gig')
     categories = models.ManyToManyField(to='Category', blank=True, related_name='events')
     genres =     models.ManyToManyField(to='Genre', blank=True, related_name='events')
 
@@ -38,28 +42,3 @@ class Genre(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Application(models.Model):
-    possible_status = [
-            ('pending', 'Pending'),
-            ('accepted', 'Accepted'),
-            ('rejected', 'Rejected'),
-            ('performed', 'Performed')
-        ]
-
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='event_applications')
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='event_applications')
-    status = models.CharField(
-            max_length=20,
-            choices = possible_status,
-            default='pending'
-            )
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        unique_together = ('user', 'event')
-
-    def __str__(self):
-        return f"Application by {self.user} for {self.event}"
-        

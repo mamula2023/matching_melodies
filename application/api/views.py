@@ -5,12 +5,16 @@ from application.serializers import ApplicationSerializer
 from application.permissions import ApplicationPermissions
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.pagination import PageNumberPagination
 
 class ApplicationViewSet(viewsets.ModelViewSet):
     queryset = Application.objects.all()
     serializer_class = ApplicationSerializer
     permission_classes = [ApplicationPermissions]    
-
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['user', 'event']
+    pagination_class = PageNumberPagination
 
     def create(self, request, pk=None):
         try:

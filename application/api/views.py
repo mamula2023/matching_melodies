@@ -18,6 +18,9 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         except Event.DoesNotExist:
             return Respose({'detail': 'Event Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
+        if event.author == request.user:
+            raise PermissionDenied({'detail': 'You cannot apply to own event'})
+
         serializer = self.get_serializer(
                 data=request.data,
                 context={'event': event, 'user': request.user}

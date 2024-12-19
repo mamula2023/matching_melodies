@@ -12,6 +12,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = CustomUserSerializer
     permission_classes = [user_permissions.IsAuthenticatedUser]
     parser_classes = [MultiPartParser, FormParser]
+
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         response.data = {"message": "CustomUser created successfully."}

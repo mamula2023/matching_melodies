@@ -8,7 +8,7 @@ class Application(models.Model):
             ('pending', 'Pending'),
             ('accepted', 'Accepted'),
             ('rejected', 'Rejected'),
-            ('performed', 'Performed')
+            ('held', 'Held')
         ]
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='event_applications')

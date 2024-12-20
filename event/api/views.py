@@ -17,7 +17,7 @@ class EventViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['genres', 'categories', 'author', 'city', 'event_type']
-    ordering_fields = ['created_at', 'payment', 'title']  # todo add date after addint it go model itself
+    ordering_fields = ['created_at', 'payment', 'title', 'date'] 
     ordering = ['created_at']
 
 

@@ -144,6 +144,7 @@ By default, django server runs on port 8000
     * `gig` can only be created by organizers
     * `collaboration` can only be created by musicians
     * field `date` is only for gigs. collaborations are meant to be long-term continuous process
+    * after date of `date` has passed, all applications on event will have status changed to `performed`
 
 5. Get all events or retrieve one by id
     ```

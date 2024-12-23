@@ -29,11 +29,9 @@ class EventViewSet(viewsets.ModelViewSet):
 
 
     def list(self, request, *args, **kwargs):
-        # Get the filtered queryset
         queryset = self.filter_queryset(self.get_queryset())
-
-        # Paginate events
         page = self.paginate_queryset(queryset)
+
         if page is not None:
             events = self.get_serializer(page, many=True).data
             paginated_response = self.get_paginated_response(events)
@@ -41,14 +39,12 @@ class EventViewSet(viewsets.ModelViewSet):
             events = self.get_serializer(queryset, many=True).data
             paginated_response = Response({'events': events})
 
-        # Generate distinct filters
         cities = queryset.values_list('city', flat=True).distinct()
         genres = Genre.objects.filter(events__in=queryset).distinct().values("id", "title")
         categories = Category.objects.filter(events__in=queryset).distinct().values("id", "title")
 
         authors = CustomUser.objects.filter(events__in=queryset).distinct().values("id", "username")
 
-        # Add filters to the paginated response
         paginated_response.data['filters'] = {
             'cities': list(set(cities)),
             'genres': list(genres),
@@ -76,7 +72,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
     model = Category
     pagination_class = None
     
-    # cache list of categories for 6 hours
     @method_decorator(cache_page(60*60*6))
     def list(self, request):
         return super().list(request)

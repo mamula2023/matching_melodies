@@ -25,17 +25,16 @@ main {
   font-weight: bold;
 }
 
-/* Ensure the nav links display inline horizontally */
 .nav-links {
   list-style: none;
-  display: flex; /* This makes the list horizontal */
-  gap: 20px; /* Adds space between items */
+  display: flex; 
+  gap: 20px; 
   margin: 0;
   padding: 0;
 }
 
 .nav-links li {
-  display: inline; /* This ensures list items are inline, but `flex` is enough for this */
+  display: inline; 
 }
 
 .nav-links a {
@@ -104,7 +103,7 @@ main {
 
 @media (max-width: 768px) {
   .nav-links {
-      display: none; /* Hide nav links on small screens */
+      display: none; 
   }
 
   .auth-links {

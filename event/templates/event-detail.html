@@ -5,7 +5,6 @@
 {% block content %}
 
 <div class="event-detail-container">
-    <!-- Event Header Section -->
     <div class="event-header">
         <h1 id="event-title">Event Title</h1>
         <p id="event-date">Event Date</p>
@@ -13,42 +12,34 @@
         <p id="event-location">Location: Event Location</p>
     </div>
 
-    <!-- Event Image -->
     <div class="event-banner">
         <img id="event-image" src="/static/placeholder.jpg" alt="Event Image">
     </div>
 
-    <!-- Event Description -->
     <div class="event-description">
         <h2>Description</h2>
         <p id="event-description">Event description goes here.</p>
     </div>
 
-    <!-- Payment Info (For Gigs Only) -->
     <div id="event-payment" class="event-payment" style="display: none;">
         <h3>Payment</h3>
         <p>Amount: <span id="payment-amount">$0</span></p>
     </div>
 
-    <!-- Additional Information -->
     <div class="event-additional-info">
         <h3>Additional Information</h3>
         <p id="event-additional-info">Additional information about the event.</p>
     </div>
 
-    <!-- Categories and Genres -->
     <div class="event-categories-genres">
         <h3>Categories</h3>
         <ul id="event-categories">
-            <!-- Categories will be populated dynamically -->
         </ul>
         <h3>Genres</h3>
         <ul id="event-genres">
-            <!-- Genres will be populated dynamically -->
         </ul>
     </div>
 
-    <!-- Event Author -->
     <div class="event-author">
         <h3>Organizer</h3>
         <p id="event-author"></p>

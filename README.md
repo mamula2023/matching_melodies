@@ -14,6 +14,21 @@ Matching Melodies is online service that allows musicians to find opportunities:
 
 3. activate virtual environment
 
+  * using venv
+    ```
+    python -m venv venv
+    source venv/bin/activate
+    ```
+  * using anaconda
+
+    * create environment
+    ```
+    conda create -n [your env name] python=3.11
+    ```
+    * activate
+    ```
+    conda activate [your env name]
+    ```
 4. install requirements
   ``` 
   pip install -r requirements.txt 
@@ -225,3 +240,18 @@ By default, django server runs on port 8000
     * {action} is either accept or reject
     * Accepting or rejecting can only be done once.
     * hitting endpoint triggers celery task that notifies applicant about status change
+
+10. Get available genres and categories
+    ```
+    GET /api/event/genre/
+    GET /api/event/category/
+    ```
+    These endpoints do not need authorization. Genre and Category objects are added only by admin in admin panel.
+    These endpoints return arrays of corresponding objects
+    Single object in response:
+    ```json
+    {
+      "id": 1,
+      "title": "Hip-Hop"
+    }
+    ```

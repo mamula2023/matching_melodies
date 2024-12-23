@@ -19,7 +19,7 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = '__all__'
         read_only_fields = ['id', 'author']
-
+    
 
     def to_representation(self, instance):
         data = super().to_representation(instance)

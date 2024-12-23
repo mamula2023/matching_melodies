@@ -1,8 +1,10 @@
-=======
+***
+The backend of the project is nearly complete and functions as intended. However, the frontend is quite basic and mainly displays information, with limited interactivity and not all backend functionality integrated yet. Any contributions, especially in the form of pull requests for the backend and frontend, are welcome.
+***
+
 # Matching Melodies 
 
 Matching Melodies is online service that allows musicians to find opportunities: discover events to perform at or search for like-minded musicians.
-
 
 ## Installation
 
@@ -49,15 +51,32 @@ Matching Melodies is online service that allows musicians to find opportunities:
   ```
   python manage.py migrate
   ```
+8. populate .env
+    
+  To send informational emails to applicants when their status changes (accepted or rejected),
+  the system currently uses my personal email credentials.
+  If you want to test the project, you'll need to populate the missing fields in the .env file as follows:
+  ```
+  EMAIL_HOST_USER=
+  DEFAULT_FROM_EMAIL=
+  ```
+   Generate an app password in your Google account settings:
+  
+   Go to Google Account Settings.
+   Under "Security," find "App passwords."
+   Create a new app password for your application and copy the 16-character password provided.
+   ```
+   EMAIL_HOST_PASSWORD=
+   ```
 
-6. set up celery tasks
+9. set up celery tasks
   * in separate terminals run:
   ```
   celery -A matching_melodies worker
   celery -A matching_melodies beat
   ```
 
-8. Run server 
+10. Run server 
   ``` 
   python manage.py runserver PORT
   ```

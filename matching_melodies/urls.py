@@ -3,8 +3,10 @@ from django.urls import path, include
 from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
+from event.views import HomePageView
 
 urlpatterns = [
+    path('', HomePageView.as_view(), name='homepage'),
     path('api/user/', include('user.api.urls')),
     path('user/', include('user.urls')),
 

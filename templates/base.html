@@ -1,4 +1,5 @@
 {% load static %}
+{% load cache %}
 <html lang="en">
 <head>
     <title>{% block title %} {% endblock title %}</title>
@@ -7,7 +8,7 @@
 </head>
 <body>
 <div class="wrapper">
-    
+    {% cache 3600 header %} 
     <header>
         <nav>
             <div class="logo">
@@ -24,6 +25,7 @@
             </div>
         </nav>
     </header>
+    {% endcache header%}
 
     <main>
     {% block content %}

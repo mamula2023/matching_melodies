@@ -19,7 +19,7 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = '__all__'
         read_only_fields = ['id', 'author']
-
+    
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -39,3 +39,9 @@ class EventSerializer(serializers.ModelSerializer):
 
         return event
 
+    def validate(self, data):
+        if data['event_type'] == 'collaboration' and data.get('date') is not None:
+            raise serializers.ValidationError("Collaboration events should not have a date.")
+        elif data['event_type'] == 'gig' and not data.get('date'):
+            raise serializers.ValidationError("Gig events must have a date.")
+        return data

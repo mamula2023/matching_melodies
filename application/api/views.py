@@ -7,6 +7,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
+from application.tasks import send_application_email
 
 class ApplicationViewSet(viewsets.ModelViewSet):
     queryset = Application.objects.all()
@@ -20,7 +21,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         try:
             event=Event.objects.get(pk=pk)
         except Event.DoesNotExist:
-            return Respose({'detail': 'Event Not Found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'detail': 'Event Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
         if event.author == request.user:
             raise PermissionDenied({'detail': 'You cannot apply to own event'})
@@ -74,6 +75,9 @@ class ApplicationViewSet(viewsets.ModelViewSet):
 
         application.status='accepted'
         application.save()
+
+        inform_applicant(application, True)
+
         return Response({'detail': 'Application accepted successfully'})
 
         
@@ -89,6 +93,9 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         
         application.status = 'rejected'
         application.save()
+        
+        inform_applicant(application, False)
+
         return Response({'detail': 'Application rejected successfully'})
 
 
@@ -99,3 +106,12 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         except Application.DoesNotExist:
             raise NotFound(detail="Application not found")
 
+
+def inform_applicant(applicaiton, success):
+    subject = f"Update about application on {application.event.event_type} {application.event.title}"
+    if success:
+        message = f"Congratulations! You have been accepted on {application.event.title}"
+    else:
+        message = f"We are sorry to inform you that author of {application.event.title} has rejected your application"
+    send_application_email.delay(application.user.email, subject, message)
+    

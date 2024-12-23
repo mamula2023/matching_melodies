@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import EventViewSet 
+from .views import EventViewSet, GenreViewSet, CategoryViewSet
 from application.api.views import ApplicationViewSet
 
 urlpatterns = [
@@ -8,5 +8,7 @@ urlpatterns = [
     path('<int:pk>/apply/', ApplicationViewSet.as_view({'post': 'create'}), name='application'),
 
     path('<int:pk>/application/', ApplicationViewSet.as_view({'get': 'list'}), name='event-applications'),
+    path('genre/', GenreViewSet.as_view({'get': 'list'}), name='genres-list'),
+    path('category/', CategoryViewSet.as_view({'get':'list'}), name='categories-list'),
 ]
 

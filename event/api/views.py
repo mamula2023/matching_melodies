@@ -11,6 +11,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from user.models import CustomUser
 from rest_framework.permissions import IsAuthenticated
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie, vary_on_headers
+
+
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
@@ -71,9 +76,19 @@ class CategoryViewSet(viewsets.ModelViewSet):
     model = Category
     pagination_class = None
     
+    # cache list of categories for 6 hours
+    @method_decorator(cache_page(60*60*6))
+    def list(self, request):
+        return super().list(request)
+    
 class GenreViewSet(viewsets.ModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer 
     pagination_class = None
     model = Genre
+
+    @method_decorator(cache_page(60*60*6))
+    def list(self, request):
+        return super().list(request)
+
 

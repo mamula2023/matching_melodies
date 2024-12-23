@@ -1,1 +1,0 @@
-{'count': 0, 'next': None, 'previous': None, 'results': [], 'filters': {'cities': [], 'genres': [], 'categories': [], 'authors': []}}

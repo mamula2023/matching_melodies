@@ -49,6 +49,7 @@ Matching Melodies is online service that allows musicians to find opportunities:
 
 7. make migrations
   ```
+  python manage.py makemigrations
   python manage.py migrate
   ```
 8. populate .env
